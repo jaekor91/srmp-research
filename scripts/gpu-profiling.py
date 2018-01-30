@@ -1,3 +1,6 @@
+import tensorflow as tf
+import time
+
 s = 100000
 x = tf.Variable(tf.random_normal([s,s]))
 y = tf.Variable(tf.random_normal([s,s]))
@@ -13,4 +16,4 @@ with tf.Session() as sess:
    elapsed = end - start
    flops = (calculations/elapsed)/1e12
    print("%d by %d matricies: %.5f TFLOPS" % (s, s, flops))
-sess.close(
+sess.close()
