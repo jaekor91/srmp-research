@@ -9,6 +9,7 @@ mpl.rcParams['ytick.labelsize'] = 15
 
 import numpy as np
 import matplotlib.pyplot as plt
+from astropy.io import fits# If missing, do "pip install astropy"
 
 def mag2flux(mag):
     return 10**(0.4*(22.5-mag))
