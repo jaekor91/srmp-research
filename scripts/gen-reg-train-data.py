@@ -34,10 +34,10 @@ num_rows = num_cols = 32 # Pixel index goes from 0 to num_rows-1
 save_dir = "../data/reg_data/"
 
 #---- Number of samples
-Nsample = 10
+Nsample = 100000
 
-#---- Generate random magnitudes in the range 18 through 19. (samples,)
-true_mags = np.random.random(size=Nsample) + 18
+#---- Generate random magnitudes in the range 16 through 19. (samples,)
+true_mags = 3 * np.random.random(size=Nsample) + 16
 
 #---- Generate a placeholder for image tensor (samples)
 im_sim = np.zeros((Nsample, num_rows, num_cols, 1))# Simulated images
