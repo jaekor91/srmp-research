@@ -1,0 +1,23 @@
+Authors: Mohammed Shafim, David Lee, and Jae Hyeon Lee
+Year: 2018
+
+Utility 
+- Notes/script: All utility functions are saved in the utils.py
+
+GPU profiling
+**David
+
+MNIST problem example
+- Notes: MNIST example using TensorFlow.
+- Script: mnist-problem.py
+
+ResNet builder class file
+- Notes: Used to build Keras resnet models. Found here: https://github.com/raghakot/keras-resnet
+- Script: resnet.py
+
+Light source inference using regression deep learning model
+- Notes: Train a ResNet regression model (using Keras) based on simulated images with magnitude ranging [16, 19]
+- Scripts: 
+	- Training: regression-trainer.py
+	- Data generation: gen-reg-train-data.py
+
