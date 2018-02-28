@@ -21,3 +21,7 @@ Light source inference using regression deep learning model
 	- Training: regression-trainer.py
 	- Data generation: gen-reg-train-data.py
 
+Image good/bad classifier based on simulated images
+- Notes: Train a ResNet classfier (using Keras) based on simulated images with magnitude ranging [15, 20]
+- Scripts:
+	- Data generation: gen-clf-train-data.py
