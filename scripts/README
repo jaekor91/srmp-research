@@ -5,7 +5,8 @@ Utility
 - Notes/script: All utility functions are saved in the utils.py
 
 GPU profiling
-**David
+- Notes: Profile how many multiplications the GPU can do per second using TensorFlow matricies
+- Script: gpu-profiling.py
 
 MNIST problem example
 - Notes: MNIST example using TensorFlow.
@@ -13,15 +14,24 @@ MNIST problem example
 
 ResNet builder class file
 - Notes: Used to build Keras resnet models. Found here: https://github.com/raghakot/keras-resnet
-- Script: resnet.py
+- Scripts: 
+    - Regression: resnet.py
+    - Classification: resnet_clf.py
 
 Light source inference using regression deep learning model
 - Notes: Train a ResNet regression model (using Keras) based on simulated images with magnitude ranging [16, 19]
 - Scripts: 
-	- Training: regression-trainer.py
-	- Data generation: gen-reg-train-data.py
+    - Training: regression-trainer.py
+    - Data generation: gen-reg-train-data.py
 
 Image good/bad classifier based on simulated images
 - Notes: Train a ResNet classfier (using Keras) based on simulated images with magnitude ranging [15, 20]
 - Scripts:
-	- Data generation: gen-clf-train-data.py
+    - Training: classification-trainer.py
+    - Data generation: gen-clf-train-data.py
+
+Regression model error visualization
+- Notes: Use histograms to visualize the deviance of the regression model's predictions on simulated images with set magnitudes.
+- Scripts:
+    - Visualization: histogram-generator.py
+    - Data generation: gen-reg-hist-data.py
