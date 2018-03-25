@@ -54,7 +54,7 @@ def generalized_gauss_PSF(num_rows, num_cols, x, y, FWHM, rho=0, num_comps=10, s
         PSF = np.exp(-(np.square(xv-x-dx) + np.square(yv-y-dy) - 2 * rho * (yv-y-dy) * (xv - x -dx))/(2*sigma**2 * (1-rho**2))) \
             /(np.pi * 2 * sigma**2 * np.sqrt(1 - rho**2))
 
-    return PSF    
+    return PSF / num_comps    
 
 def poisson_realization(D0):
     """
