@@ -20,7 +20,7 @@ sep_peaks_max = 8
 
 
 # --- Place holder for images and label
-Nsample = 36
+Nsample = 100
 im_arr = np.zeros((Nsample, nrows, ncols))
 label_arr = np.zeros(Nsample, dtype=int)
 sky_added_arr = np.zeros(Nsample, dtype=bool) # Tells whether sky was added or not
@@ -33,11 +33,11 @@ sky_added_arr = np.zeros(Nsample, dtype=bool) # Tells whether sky was added or n
 for i in xrange(Nsample):
     im = np.ones((nrows, ncols)) * B # Background
 
-    # Whether to generate a single peak (r < 0.5) or double peaks (r>0.5)
+    # Whether to generate a single peak or double peaks
     r = np.random.random()
-    if (r > 0.5) and (r < 0.75): # Single
+    if (r > 1/3.) and (r < 2/3.): # Single
         label = 1
-        x = np.random.randint(nrows//2 - 5, nrows//2 + 5, 1)[0] # Wavelength position
+        x = np.random.randint(nrows//2 - 3, nrows//2 + 3, 1)[0] # Wavelength position
         y = np.random.randint(2, ncols-2, 1)[0] # Wavelength position
         f = (fmax - fmin) * np.random.random() + fmin # Random flux selection
         rho = (rho_max - rho_min) * np.random.random() + rho_min # Covarince selection
@@ -46,9 +46,9 @@ for i in xrange(Nsample):
         scatter = np.random.random() * scatter_max
         peak = f * generalized_gauss_PSF(nrows, ncols, x,  y, FWHM=FWHM, rho=rho, scatter=scatter, num_comps=num_comps) # Double peak
         im += peak # Add peak
-    elif (r > 0.75): # Double
+    elif (r > 2/3.): # Double
         label = 2
-        x = np.random.randint(nrows//2 - 5, nrows//2 + 5, 1)[0] # Wavelength position        
+        x = np.random.randint(nrows//2 - 3, nrows//2 + 3, 1)[0] # Wavelength position        
         y = np.random.randint(5, ncols-5, 1)[0] # Wavelength position of the center
         sep_peaks = np.random.random() * (sep_peaks_max - sep_peaks_min) + sep_peaks_min # Separation in peaks in pixels
         f = (fmax - fmin) * np.random.random() + fmin # Random flux selection
@@ -80,6 +80,11 @@ for i in xrange(Nsample):
     im -= B # Background subtraction    
     if add_sky: # 
         im -= im_sky # Sky subtraction
+
+    # -- Zero out the top and bottom rows to mimic real data features
+    idx = np.random.randint(-1, 2, 1)[0]
+    im[:6 + idx, :] = 0
+    im[25 + idx:, :] = 0
     
     # -- Save the image and its label
     im_arr[i] = im
@@ -100,20 +105,20 @@ sky_added_arr = data["skylines"]
     
 # ---- View a sample of images.
 plt.close()
-fig, ax_list = plt.subplots(6, 6, figsize=(10, 10))
+fig, ax_list = plt.subplots(9, 9, figsize=(10, 10))
 
 i_start = 0
-i_end = i_start + 36
+i_end = i_start + 81
 for i in range(i_start, i_end):
-    idx_row = (i-i_start) // 6
-    idx_col = (i-i_start) % 6
+    idx_row = (i-i_start) // 9
+    idx_col = (i-i_start) % 9
     ax_list[idx_row, idx_col].imshow(im_arr[i, :, :], cmap="gray", interpolation="none") # , vmin=vmin, vmax=vmax)
     if sky_added_arr[i]:
         sky_added = "Sky"
     else:
         sky_added = ""
-    title_str = "%4d%10s" % (label_arr[i], sky_added)
-    ax_list[idx_row, idx_col].set_title(title_str)
+    title_str = "%4d / %4s" % (label_arr[i], sky_added)
+    ax_list[idx_row, idx_col].set_title(title_str, fontsize=5)
     ax_list[idx_row, idx_col].axis("off")    
 
 plt.savefig("blob_sim_training_examples.png", dpi=200, bbox_inches="tight")
