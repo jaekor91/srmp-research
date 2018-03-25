@@ -32,7 +32,7 @@ num_rows = num_cols = 32 # Pixel index goes from 0 to num_rows-1
 save_dir = "../data/clf_data/sim/"
 
 #---- Number of samples for good/bad each. 
-Nsample = 100 * 2
+Nsample = 100000
 
 #---- Generate random magnitudes in the range 15 through 21. (samples,)
 true_mags = np.random.random(size=Nsample)* 5 + 15
@@ -41,6 +41,7 @@ true_mags = np.random.random(size=Nsample)* 5 + 15
 im_sim = np.zeros((Nsample, num_rows, num_cols, 1))# Simulated images
 label = np.zeros(Nsample, dtype=bool)
 label[int(Nsample/2):] = True # True is bad (because it's flagged.)
+contam = np.zeros(Nsample)# Type of contamination, 0 is no contamination
 
 #---- Generate a mock image for each magnitude
 for i, m in enumerate(true_mags):
@@ -67,11 +68,13 @@ for i in range(int(Nsample/2), Nsample):
         im_sim[i, random_positions, :, 0] = 0.
         random_positions = np.random.choice(range(int(num_cols/2-5), int(num_cols/2+5)), size=num_cols_zero_out, replace=False)        
         im_sim[i, :, random_positions, 0] = 0.
+        contam[i] = 1
 
     #---- Zero out random block
     elif case == 1:
         corner = np.random.randint(low=num_rows/2.-4, high=num_rows/2.+4, size=2)
         im_sim[i, corner[0]-5:corner[0] + 5, corner[1]-5:corner[1] +5,] = 0.
+        contam[i] = 2
 
     #---- Fudge the star
     # Generate a new image with two stars.
@@ -91,6 +94,7 @@ for i in range(int(Nsample/2), Nsample):
         # Poission realization D of the underlying truth D0
         D = poisson_realization(D0)
         im_sim[i, :, :, 0] = D
+        contam[i] = 3
         
     #---- Place the original star off the center
     elif case == 3:
@@ -109,8 +113,9 @@ for i in range(int(Nsample/2), Nsample):
         # Poission realization D of the underlying truth D0
         D = poisson_realization(D0)
         im_sim[i, :, :, 0] = D
+        contam[i] = 4
         
-np.savez(save_dir+"training_data.npz", images=im_sim, label=label)
+np.savez(save_dir+"training_data1.npz", images=im_sim, label=label, contamination=contam)
 
 
 
