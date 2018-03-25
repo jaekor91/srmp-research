@@ -10,6 +10,8 @@ mpl.rcParams['ytick.labelsize'] = 15
 import numpy as np
 import matplotlib.pyplot as plt
 from astropy.io import fits# If missing, do "pip install astropy"
+from scipy.ndimage.filters import median_filter
+
 
 def mag2flux(mag):
     return 10**(0.4*(22.5-mag))
@@ -65,3 +67,37 @@ def poisson_realization(D0):
         for j in range(D0.shape[1]):
             D[i, j] = np.random.poisson(lam=D0[i, j], size=1)
     return D
+
+
+def sky_adulteration(num_rows, num_cols, strength, min_width=3, max_width=5):
+    """
+    Add vertical sky lines to an image of size (num_rows, num_cols)
+    with width selected from [min_width, max_width]. 
+    """
+    im_sky = np.zeros((num_rows, num_cols))
+    num_lines = np.random.choice([1, 2]) # There could be max of two lines
+    y = [] # The center position of the lines
+    widths = []
+    
+    # Select line positions that are at least 5 pixels apart.
+    counter = 0
+    while counter < num_lines:
+        y_tmp = np.random.randint(3, num_cols-3, 1)[0]
+        too_close = False
+        for tmp in y:
+            if np.abs(tmp-y_tmp) < 5:
+                too_close = True
+                
+        if not too_close:
+            y.append(y_tmp)
+            width = np.random.randint(3, 7, 1)[0]
+            widths.append(width)
+            counter += 1
+    # Add the lines 
+    for i in xrange(num_lines):
+        w = widths[i]
+        y_tmp = y[i]
+        im_sky[:, y_tmp-w//2:y_tmp+w//2] = strength
+        
+    return im_sky
+    
