@@ -20,7 +20,7 @@ sep_peaks_max = 8
 
 
 # --- Place holder for images and label
-Nsample = 100
+Nsample = 10000
 im_arr = np.zeros((Nsample, nrows, ncols))
 label_arr = np.zeros(Nsample, dtype=int)
 sky_added_arr = np.zeros(Nsample, dtype=bool) # Tells whether sky was added or not
@@ -31,6 +31,8 @@ sky_added_arr = np.zeros(Nsample, dtype=bool) # Tells whether sky was added or n
 
 # --- Generate image
 for i in xrange(Nsample):
+    if (i % 1000) == 0:
+        print "Generating %d-th sample." % i
     im = np.ones((nrows, ncols)) * B # Background
 
     # Whether to generate a single peak or double peaks
